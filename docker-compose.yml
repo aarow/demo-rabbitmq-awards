@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build:
+      context: ./backend
+    restart: always
+    ports:
+      - "5001:5001"
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+    depends_on:
+      - mongo
+    volumes:
+      - ./backend:/usr/src/app
+      - ./backend/node_modules:/usr/src/app/node_modules
+    command: npm run dev
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/usr/src/app  # Mount local frontend directory
+    environment:
+      - NODE_ENV=${NODE_ENV}  # Set environment to development or production
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
