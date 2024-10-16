@@ -1,6 +1,7 @@
-const { awards } = require("../example-data/data");
+import { Collection, Document } from "mongodb";
+import awards from "../example-data/data";
 
-async function seed(collection) {
+export default async function seed(collection: Collection<Document>) {
   const awardsCount = await collection.estimatedDocumentCount();
   console.log(`There are ${awardsCount} awards in the collection.`);
 
@@ -12,7 +13,3 @@ async function seed(collection) {
   console.log("Seeding collection with example data...");
   await collection.insertMany(awards);
 }
-
-module.exports = {
-  seed,
-};

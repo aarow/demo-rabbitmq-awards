@@ -1,16 +1,21 @@
-const { sendMessage } = require("./send-message");
+import { Collection, Document } from "mongodb";
+import { type Award } from "../types/Award";
+import sendMessage from "../utils/send-message";
 
-async function streamAwards(collection) {
+export default async function streamAwards(collection: Collection<Document>) {
   const changeStream = collection.watch();
   changeStream.on("change", async (change) => {
-    // if change is an update or insert, then if award_number is not null, then print it
     if (
       change.operationType === "update" ||
       change.operationType === "insert"
     ) {
-      const award = await collection.findOne({
+      const award = await collection.findOne<Award>({
         _id: change.documentKey._id,
       });
+
+      if (!award) {
+        return;
+      }
 
       if (
         award.award_number &&
@@ -37,7 +42,3 @@ async function streamAwards(collection) {
     }
   });
 }
-
-module.exports = {
-  streamAwards,
-};

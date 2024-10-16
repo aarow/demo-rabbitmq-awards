@@ -1,15 +1,15 @@
-const amqp = require("amqplib");
-const dotenv = require("dotenv");
-const { Buffer } = require("node:buffer");
-const { RABBITMQ_EXCHANGE } = require("./constants");
+import amqp from "amqplib";
+import dotenv from "dotenv";
+import { Buffer } from "node:buffer";
+import constants from "../constants/constants";
 
 dotenv.config();
 
 const rabbitmqUrl = process.env.RABBITMQ_URL;
-const exchangeName = RABBITMQ_EXCHANGE;
+const exchangeName = constants.RABBITMQ_EXCHANGE;
 const queue = "";
 
-async function connect(url) {
+async function connect(url: string | undefined) {
   if (!url) {
     throw new Error("RabbitMQ URL not found");
   }
@@ -18,7 +18,7 @@ async function connect(url) {
   return channel;
 }
 
-async function sendMessage({
+export default async function sendMessage({
   name = "",
   email = "",
   message = "",
@@ -34,14 +34,10 @@ async function sendMessage({
   channel.publish(
     exchangeName,
     queue,
-    Buffer.from(JSON.stringify({ name, email, message }))
+    Buffer.from(JSON.stringify({ name, email, message, timestamp }))
   );
 
   console.log("sent message to rabbitmq");
 
   await channel.close();
 }
-
-module.exports = {
-  sendMessage,
-};
