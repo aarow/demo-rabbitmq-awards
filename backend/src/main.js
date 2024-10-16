@@ -1,7 +1,8 @@
 const dotenv = require("dotenv");
 const { MongoClient } = require("mongodb");
 const { AWARDS_DATABASE_NAME, AWARDS_COLLECTION_NAME } = require("./constants");
-const { awards } = require("../example-data/data");
+const { seed } = require("./seed");
+const { streamAwards } = require("./stream-awards");
 
 dotenv.config();
 
@@ -17,29 +18,14 @@ async function main() {
     const database = client.db(AWARDS_DATABASE_NAME);
     const collection = database.collection(AWARDS_COLLECTION_NAME);
 
-    const changeStream = collection.watch();
-    changeStream.on("change", (change) => {
-      console.log(`Received change event: ${JSON.stringify(change)}`);
-    });
+    // watch for changes in the collection
+    streamAwards(collection);
 
     // Seed the collection with example data
     await seed(collection);
   } catch (error) {
     console.error(error);
   }
-}
-
-async function seed(collection) {
-  const awardsCount = await collection.estimatedDocumentCount();
-  console.log(`There are ${awardsCount} awards in the collection.`);
-
-  if (awardsCount > 0) {
-    console.log("Skipping seeding because collection is not empty.");
-    return;
-  }
-
-  console.log("Seeding collection with example data...");
-  await collection.insertMany(awards);
 }
 
 module.exports = {
