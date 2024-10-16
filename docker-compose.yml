@@ -1,41 +1,63 @@
 version: '3.8'
-
+ 
 services:
   mongo:
-    image: mongo
-    restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-
-  backend:
     build:
-      context: ./backend
+      context: .
+      dockerfile: Dockerfile
+    container_name: mongodb-replicaset
     restart: always
-    ports:
-      - "5001:5001"
     environment:
-      - MONGODB_URI=${MONGODB_URI}
-    depends_on:
-      - mongo
-    volumes:
-      - ./backend:/usr/src/app
-      - ./backend/node_modules:/usr/src/app/node_modules
-    command: npm run dev
-
-  frontend:
-    build:
-      context: ./frontend
-    restart: always
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
     ports:
-      - "3000:3000"
+      - 27017:27017
+    command: --replSet rs0 --keyFile /etc/mongo-keyfile --bind_ip_all --port 27017
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'127.0.0.1:27017'}]}) }" | mongosh --port 27017 -u root -p root --authenticationDatabase admin
+      interval: 5s
+      timeout: 15s
+      start_period: 15s
+      retries: 10
     volumes:
-      - ./frontend:/usr/src/app  # Mount local frontend directory
-    environment:
-      - NODE_ENV=${NODE_ENV}  # Set environment to development or production
-    depends_on:
-      - backend
+      - data:/data/db
 
+  
+  # mongo:
+  #   image: mongo
+  #   restart: always
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongo-data:/data/db
+
+  # backend:
+  #   build:
+  #     context: ./backend
+  #   restart: always
+  #   ports:
+  #     - "5001:5001"
+  #   environment:
+  #     - MONGODB_URI=${MONGODB_URI}
+  #   depends_on:
+  #     - mongo
+  #   volumes:
+  #     - ./backend:/usr/src/app
+  #     - ./backend/node_modules:/usr/src/app/node_modules
+  #   command: npm run dev
+
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #   restart: always
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./frontend:/usr/src/app  # Mount local frontend directory
+  #   environment:
+  #     - NODE_ENV=${NODE_ENV}  # Set environment to development or production
+  #   depends_on:
+  #     - backend
+ 
 volumes:
-  mongo-data:
+  data: {}

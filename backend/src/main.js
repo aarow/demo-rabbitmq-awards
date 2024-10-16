@@ -1,5 +1,7 @@
 const dotenv = require("dotenv");
 const { MongoClient } = require("mongodb");
+const { AWARDS_DATABASE_NAME, AWARDS_COLLECTION_NAME } = require("./constants");
+const { awards } = require("../example-data/data");
 
 dotenv.config();
 
@@ -8,39 +10,36 @@ const client = new MongoClient(uri);
 
 async function main() {
   try {
+    console.log("Connecting to MongoDB...");
     await client.connect();
-    const database = client.db("demo-rabbitmq");
-    const collection = database.collection("awards");
+    console.log("Conected successfully to MongoDB...");
 
-    const awardsCount = await collection.estimatedDocumentCount();
-    console.log(`There are ${awardsCount} awards in the collection.`);
+    const database = client.db(AWARDS_DATABASE_NAME);
+    const collection = database.collection(AWARDS_COLLECTION_NAME);
 
-    if (awardsCount > 0) {
-      console.log("Deleting all awards...");
-      await collection.deleteMany({});
-    }
+    const changeStream = collection.watch();
+    changeStream.on("change", (change) => {
+      console.log(`Received change event: ${JSON.stringify(change)}`);
+    });
 
-    const award = {
-      id: "1",
-      createdAt: "2021-01-01",
-      updatedAt: "2021-01-01",
-      award_number: "12345",
-      acuro_checklist_submitted: true,
-      ohro_checklist_submitted: true,
-      rec_submitted: true,
-      award_health_color_code: "BLUE",
-    };
-
-    const result = await collection.insertOne(award);
-    console.log(
-      `New award created with the following id: ${result.insertedId} ${result.acknowledged}`
-    );
-
-    const awards = await collection.find({}).toArray();
-    console.log(awards);
-  } finally {
-    await client.close();
+    // Seed the collection with example data
+    await seed(collection);
+  } catch (error) {
+    console.error(error);
   }
+}
+
+async function seed(collection) {
+  const awardsCount = await collection.estimatedDocumentCount();
+  console.log(`There are ${awardsCount} awards in the collection.`);
+
+  if (awardsCount > 0) {
+    console.log("Skipping seeding because collection is not empty.");
+    return;
+  }
+
+  console.log("Seeding collection with example data...");
+  await collection.insertMany(awards);
 }
 
 module.exports = {
