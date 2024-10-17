@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import { connect } from "../utils/rabbitmq";
 import constants from "../constants/constants";
+import updateAlertsCollection from "./update-alerts-collection";
 
 dotenv.config();
 
@@ -21,7 +22,13 @@ export async function consumeAlertsSentQueue() {
       return;
     }
 
-    console.log("Received message: ", msg.content.toString());
+    console.log(
+      "consumeAlertsSentQueue Received message: ",
+      msg.content.toString()
+    );
+
+    updateAlertsCollection(JSON.parse(msg.content.toString()));
+
     channel.ack(msg);
   });
 }

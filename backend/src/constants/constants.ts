@@ -3,7 +3,6 @@ export default {
   AWARDS_COLLECTION_NAME: "awards",
   RABBITMQ_EXCHANGE: "mq-test-exchange",
   ALERTS_COLLECTION_NAME: "alerts",
-  ALERTS_SENT_COLLECTION_NAME: "alerts-sent",
   ALERTS_QUEUE: "alerts",
   ALERTS_SENT_QUEUE: "alerts-sent",
 };

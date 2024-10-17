@@ -1,8 +1,9 @@
 import {
   consumeAlertsSentQueue,
   seedAlertsSentQueue,
-} from "./consume-alerts-sent";
+} from "./consume-alerts-sent-queue";
 import streamAwards from "./db/stream-awards";
+import { emailProcessor } from "./email-processor-example";
 import seedAwards from "./utils/seed-awards";
 
 export default async function main() {
@@ -13,8 +14,10 @@ export default async function main() {
     // watch for changes in the collection
     streamAwards();
 
-    seedAlertsSentQueue();
+    // seedAlertsSentQueue();
     consumeAlertsSentQueue();
+
+    emailProcessor();
   } catch (error) {
     console.error(error);
   }
