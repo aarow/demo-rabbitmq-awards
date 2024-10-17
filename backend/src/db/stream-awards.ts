@@ -2,8 +2,15 @@ import { Collection, Document } from "mongodb";
 import { type Award } from "../types/Award";
 import checkChecklists from "./checkChecklists";
 import checkREC from "./checkREC";
+import getCollection from "./connect";
+import constants from "../constants/constants";
 
-export default async function streamAwards(collection: Collection<Document>) {
+export default async function streamAwards() {
+  const collection = await getCollection(constants.AWARDS_COLLECTION_NAME);
+  if (!collection) {
+    throw new Error("Awards collection not found");
+  }
+
   const changeStream = collection.watch();
   changeStream.on("change", async (change) => {
     if (

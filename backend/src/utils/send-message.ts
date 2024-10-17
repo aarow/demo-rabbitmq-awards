@@ -7,7 +7,7 @@ dotenv.config();
 
 const rabbitmqUrl = process.env.RABBITMQ_URL;
 const exchangeName = constants.RABBITMQ_EXCHANGE;
-const queue = "";
+const queue = "alerts";
 
 async function connect(url: string | undefined) {
   if (!url) {

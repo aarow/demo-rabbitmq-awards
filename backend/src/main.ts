@@ -1,20 +1,13 @@
-import seed from "./utils/seed";
 import streamAwards from "./db/stream-awards";
-import getCollection from "./db/connect";
+import seedAwards from "./utils/seed-awards";
 
 export default async function main() {
   try {
-    const collection = await getCollection();
-
-    if (!collection) {
-      throw new Error("Collection not found");
-    }
+    // Seed the collection with example data
+    await seedAwards();
 
     // watch for changes in the collection
-    streamAwards(collection);
-
-    // Seed the collection with example data
-    seed(collection);
+    streamAwards();
   } catch (error) {
     console.error(error);
   }
