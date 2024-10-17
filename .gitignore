@@ -1,6 +1,8 @@
+/data
 node_modules
 .env
 /data
+dist
 
 # Logs
 logs

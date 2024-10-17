@@ -1,17 +1,26 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "nodemon"
   },
   "dependencies": {
+    "amqplib": "^0.10.4",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "mongodb": "^6.9.0",
     "mongoose": "^5.10.9"
   },
   "devDependencies": {
-    "nodemon": "^3.1.7"
+    "@types/amqplib": "^0.10.5",
+    "@types/express": "^5.0.0",
+    "@types/mongodb": "^4.0.7",
+    "@types/node": "^22.7.5",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
   }
 }
