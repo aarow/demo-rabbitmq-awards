@@ -22,6 +22,8 @@ export default async function checkREC(award: Award) {
     return;
   }
 
+  // TODO: Deactivate document from Alerts collection if REC is submitted (is equal to true?)
+
   insertAlertCollection(award, AlertType.REC);
 
   // send message to RabbitMQ

@@ -16,5 +16,6 @@ export default async function insertAlertCollection(
     award_number: award.award_number,
     alert_type,
     alert_sent: false,
+    timestamp: new Date().toISOString(),
   });
 }
