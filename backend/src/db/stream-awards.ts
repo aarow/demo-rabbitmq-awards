@@ -1,4 +1,3 @@
-import { Collection, Document } from "mongodb";
 import { type Award } from "../types/Award";
 import checkChecklists from "./checkChecklists";
 import checkREC from "./checkREC";

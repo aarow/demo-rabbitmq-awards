@@ -12,7 +12,7 @@ export default async function updateAlertsCollection(data: any) {
   }
 
   await collection.updateOne(
-    { award_number: data.award_number },
+    { award_number: data.award_number, alert_type: data.alert_type },
     { $set: { alert_sent: true } }
   );
 }
