@@ -1,44 +1,41 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState } from "react";
-
-export enum AlertType {
-  CHECKLIST = "CHECKLIST_COMPLETION",
-  REC = "REC_SUBMISSION",
-}
-
-export type Alert = {
-  award_number: string;
-  alert_type: AlertType;
-  alert_sent: boolean;
-  timestamp: string;
-  _id: string;
-};
-
-const getAlerts = async () => {
-  const res = await fetch("/api/mongo");
-  const data = await res.json();
-  console.log(data);
-  return data;
-};
+import { Alert } from "@/types";
+import { getAlerts } from "@/lib/getAlerts";
+import { socket } from "@/lib/socket";
+import updateAlertsWithNewAlert from "@/lib/updateAlertsFromChangeStreamDoc";
 
 export function AlertsTable() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
 
+  // Fetch alerts on mount and update the table
   useEffect(() => {
-    getAlerts().then((alerts) => {
-      setAlerts(alerts);
+    getAlerts().then((newAlerts) => {
+      setAlerts(newAlerts);
     });
+  }, []);
+
+  // Listen for new alerts and add to the table
+  useEffect(() => {
+    socket.on("new-alert", (newAlert) => {
+      setAlerts((prevAlerts) => {
+        const newAlerts = updateAlertsWithNewAlert(newAlert, prevAlerts);
+        return newAlerts;
+      });
+    });
+
+    return () => {
+      socket.off("new-alert");
+    };
   }, []);
 
   return (
