@@ -2,6 +2,7 @@ import constants from "../constants/constants";
 import { AlertType } from "../types/Alert";
 import { Award } from "../types/Award";
 import getCollection from "./connect";
+import timestamp from "../utils/timestamp";
 
 export default async function insertAlertCollection(
   award: Award,
@@ -15,7 +16,7 @@ export default async function insertAlertCollection(
   await collection.insertOne({
     award_number: award.award_number,
     alert_type,
-    alert_sent: false,
-    timestamp: new Date().toISOString(),
+    alert_sent_at: null,
+    created_at: timestamp(),
   });
 }

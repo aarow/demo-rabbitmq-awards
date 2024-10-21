@@ -6,7 +6,7 @@ export enum AlertType {
 export type Alert = {
   award_number: string;
   alert_type: AlertType;
-  alert_sent: boolean;
-  timestamp: string;
+  alert_sent_at: string | null;
+  created_at: string;
   _id: string;
 };

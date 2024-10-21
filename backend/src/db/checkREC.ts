@@ -5,6 +5,7 @@ import { type Award } from "../types/Award";
 import sendMessage from "../utils/send-message";
 import isAlertSent from "./is-alert-sent";
 import insertAlertCollection from "./insert-alert-collection";
+import timestamp from "../utils/timestamp";
 
 dotenv.config();
 
@@ -35,7 +36,7 @@ export default async function checkREC(award: Award) {
       name: process.env.ADMIN_NAME as string,
       email: process.env.ADMIN_EMAIL as string,
       message: `Award is missing REC submission: ${award.award_number}`,
-      timestamp: new Date().toISOString(),
+      created_at: timestamp(),
     },
   });
 }

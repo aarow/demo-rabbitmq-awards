@@ -20,14 +20,14 @@ export default async function isAlertSent(award: Award, alertType: AlertType) {
     throw new Error("Alerts collection not found");
   }
 
-  const alertSent = await collection.findOne<Alert>({
+  const alert = await collection.findOne<Alert>({
     award_number: award.award_number,
     alert_type: alertType,
   });
 
-  if (!alertSent) {
+  if (!alert) {
     return false;
   }
 
-  return alertSent.alert_sent;
+  return alert.alert_sent_at;
 }

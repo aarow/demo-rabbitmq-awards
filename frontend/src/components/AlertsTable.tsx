@@ -45,8 +45,8 @@ export function AlertsTable() {
           <TableHead>ID</TableHead>
           <TableHead className="w-[100px]">Award Number</TableHead>
           <TableHead>Alert Type</TableHead>
-          <TableHead>Alert Sent</TableHead>
-          <TableHead>Timestamp</TableHead>
+          <TableHead>Alert Sent At</TableHead>
+          <TableHead>Created At</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -55,8 +55,8 @@ export function AlertsTable() {
             <TableCell className="font-medium">{alert._id}</TableCell>
             <TableCell>{alert.award_number}</TableCell>
             <TableCell>{alert.alert_type}</TableCell>
-            <TableCell>{alert.alert_sent.toString()}</TableCell>
-            <TableCell>{alert.timestamp}</TableCell>
+            <TableCell>{alert.alert_sent_at as string}</TableCell>
+            <TableCell>{alert.created_at}</TableCell>
           </TableRow>
         ))}
       </TableBody>

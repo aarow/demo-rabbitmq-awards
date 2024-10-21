@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import { Buffer } from "node:buffer";
 import { connect } from "../utils/rabbitmq";
 import constants from "../constants/constants";
+import timestamp from "../utils/timestamp";
 
 dotenv.config();
 
@@ -17,14 +18,14 @@ export async function seedAlertsSentQueue() {
   }
 
   setInterval(async () => {
-    const timestamp = new Date().toLocaleString();
+    const now = timestamp();
 
     channel.publish(
       constants.RABBITMQ_EXCHANGE,
       constants.ALERTS_SENT_QUEUE,
-      Buffer.from(`Test Alert Sent at ${timestamp}`)
+      Buffer.from(`Test Alert Sent at ${now}`)
     );
 
-    console.log("sent message to rabbitmq", timestamp);
+    console.log("sent message to rabbitmq", now);
   }, 10000);
 }

@@ -5,6 +5,7 @@ import { type Award } from "../types/Award";
 import sendMessage from "../utils/send-message";
 import insertAlertCollection from "./insert-alert-collection";
 import isAlertSent from "./is-alert-sent";
+import timestamp from "../utils/timestamp";
 
 dotenv.config();
 
@@ -28,7 +29,7 @@ export default async function checkChecklists(award: Award) {
       name: process.env.ADMIN_NAME as string,
       email: process.env.ADMIN_EMAIL as string,
       message: `Award is missing ACURO and OHRO checklists: ${award.award_number}`,
-      timestamp: new Date().toISOString(),
+      created_at: timestamp(),
     },
   });
 }

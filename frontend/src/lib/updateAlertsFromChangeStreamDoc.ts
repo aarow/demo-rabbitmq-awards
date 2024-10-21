@@ -2,7 +2,7 @@ import { Alert } from "@/types";
 import { ChangeStreamDocument, ChangeStreamDocumentKey } from "mongodb";
 
 type ChangeStreamDocumentWithDocumentKey = ChangeStreamDocument &
-  ChangeStreamDocumentKey;
+  ChangeStreamDocumentKey<Partial<Alert>>;
 
 export default function updateAlertsFromChangeStreamDoc(
   changeStreamDoc: ChangeStreamDocumentWithDocumentKey,
@@ -16,7 +16,7 @@ export default function updateAlertsFromChangeStreamDoc(
       const isDuplicateAlert = alerts.some((alert) => alert._id === newAlertId);
       return isDuplicateAlert
         ? alerts
-        : [...alerts, changeStreamDoc.fullDocument];
+        : [...alerts, changeStreamDoc.fullDocument as Alert];
     case "update":
       // update existing alert in alerts array
       return alerts.map((alert) => {
