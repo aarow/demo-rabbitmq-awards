@@ -1,7 +1,7 @@
 import { Alert } from "@/types";
 import { ChangeStreamDocument, ChangeStreamDocumentKey } from "mongodb";
 
-type ChangeStreamDocumentWithDocumentKey = ChangeStreamDocument &
+export type ChangeStreamDocumentWithDocumentKey = ChangeStreamDocument &
   ChangeStreamDocumentKey<Partial<Alert>>;
 
 export default function updateAlertsFromChangeStreamDoc(

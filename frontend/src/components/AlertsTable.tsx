@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -10,33 +9,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Alert } from "@/types";
-import { getAlerts } from "@/lib/getAlerts";
-import { socket } from "@/lib/socket";
-import updateAlertsWithNewAlert from "@/lib/updateAlertsFromChangeStreamDoc";
+import { useWatchAlerts } from "@/hooks";
 
-export function AlertsTable() {
-  const [alerts, setAlerts] = useState<Alert[]>([]);
+interface AlertsTableProps {
+  initialAlerts: Alert[];
+}
 
-  // Fetch alerts on mount and update the table
-  useEffect(() => {
-    getAlerts().then((newAlerts) => {
-      setAlerts(newAlerts);
-    });
-  }, []);
-
-  // Listen for new alerts and add to the table
-  useEffect(() => {
-    socket.on("new-alert", (newAlert) => {
-      setAlerts((prevAlerts) => {
-        const newAlerts = updateAlertsWithNewAlert(newAlert, prevAlerts);
-        return newAlerts;
-      });
-    });
-
-    return () => {
-      socket.off("new-alert");
-    };
-  }, []);
+export function AlertsTable({ initialAlerts }: AlertsTableProps) {
+  const alerts = useWatchAlerts(initialAlerts);
 
   return (
     <Table>
