@@ -8,6 +8,6 @@ export type Alert = {
   alert_type: AlertType;
   alert_sent_at: string | null;
   created_at: string;
-  _id: string;
+  id: string;
   inactive_at: string | null;
 };
