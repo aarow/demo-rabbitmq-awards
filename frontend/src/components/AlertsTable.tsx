@@ -27,6 +27,7 @@ export function AlertsTable({ initialAlerts }: AlertsTableProps) {
           <TableHead>Alert Type</TableHead>
           <TableHead>Alert Sent At</TableHead>
           <TableHead>Created At</TableHead>
+          <TableHead>Inactive At</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -37,6 +38,7 @@ export function AlertsTable({ initialAlerts }: AlertsTableProps) {
             <TableCell>{alert.alert_type}</TableCell>
             <TableCell>{alert.alert_sent_at as string}</TableCell>
             <TableCell>{alert.created_at}</TableCell>
+            <TableCell>{alert.inactive_at}</TableCell>
           </TableRow>
         ))}
       </TableBody>
