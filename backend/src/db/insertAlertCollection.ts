@@ -18,5 +18,6 @@ export default async function insertAlertCollection(
     alert_type,
     alert_sent_at: null,
     created_at: timestamp(),
+    inactive_at: null,
   });
 }

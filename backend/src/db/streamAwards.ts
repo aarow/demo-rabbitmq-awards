@@ -3,6 +3,8 @@ import checkChecklists from "./checkChecklists";
 import checkREC from "./checkREC";
 import getCollection from "./connect";
 import constants from "../constants/constants";
+import checkAward from "./checkAward";
+import { AlertType } from "../types/Alert";
 
 export default async function streamAwards() {
   const collection = await getCollection(constants.AWARDS_COLLECTION_NAME);
@@ -16,6 +18,7 @@ export default async function streamAwards() {
       change.operationType === "update" ||
       change.operationType === "insert"
     ) {
+      // get original award from Awards collection
       const award = await collection.findOne<Award>({
         _id: change.documentKey._id,
       });
@@ -24,8 +27,10 @@ export default async function streamAwards() {
         return;
       }
 
-      checkChecklists(award);
-      checkREC(award);
+      // loop through AlertType enum keys and call checkAward for each
+      Object.values(AlertType).forEach((alertType) => {
+        checkAward(award, alertType);
+      });
     }
   });
 }

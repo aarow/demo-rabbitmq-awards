@@ -1,23 +1,10 @@
-import {
-  consumeAlertsSentQueue,
-  seedAlertsSentQueue,
-} from "./consume-alerts-sent-queue";
-import streamAwards from "./db/stream-awards";
-import { emailProcessor } from "./email-processor-example";
-import seedAwards from "./utils/seed-awards";
+import monitorAwards from "./monitorAwards";
+import seedAwards from "./postgresql/seedAwards";
 
 export default async function main() {
   try {
-    // Seed the collection with example data
-    seedAwards();
-
-    // watch for changes in the collection
-    streamAwards();
-
-    // seedAlertsSentQueue();
-    consumeAlertsSentQueue();
-
-    emailProcessor();
+    await seedAwards();
+    monitorAwards();
   } catch (error) {
     console.error(error);
   }

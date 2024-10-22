@@ -1,6 +1,6 @@
 import { Collection, Document } from "mongodb";
 import awards from "../example-data/data";
-import getCollection from "../db/connect";
+import getCollection from "./connect";
 import constants from "../constants/constants";
 
 export default async function seedAwards() {

@@ -3,8 +3,8 @@ import constants from "../constants/constants";
 import { AlertType } from "../types/Alert";
 import { type Award } from "../types/Award";
 import sendMessage from "../utils/send-message";
-import insertAlertCollection from "./insert-alert-collection";
-import isAlertSent from "./is-alert-sent";
+import insertAlertCollection from "./insertAlertCollection";
+import isAlertSent from "./isAlertSent";
 import timestamp from "../utils/timestamp";
 
 dotenv.config();

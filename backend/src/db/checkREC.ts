@@ -3,9 +3,10 @@ import constants from "../constants/constants";
 import { AlertType } from "../types/Alert";
 import { type Award } from "../types/Award";
 import sendMessage from "../utils/send-message";
-import isAlertSent from "./is-alert-sent";
-import insertAlertCollection from "./insert-alert-collection";
+import insertAlertCollection from "./insertAlertCollection";
 import timestamp from "../utils/timestamp";
+import getAlert from "../utils/getAlert";
+import { setAlertToInactive } from "./setAlertToInactive";
 
 dotenv.config();
 
@@ -15,16 +16,23 @@ dotenv.config();
  * @param {Award} award - the award to check
  */
 export default async function checkREC(award: Award) {
-  if (isRECSubmitted(award)) {
+  // if REC has already been submitted, return
+  if (!!award.award_number && award.rec_submitted) {
+    setAlertToInactive(award);
     return;
   }
 
-  if (await isAlertSent(award, AlertType.REC)) {
+  const alert = await getAlert({
+    award_number: award.award_number,
+    alert_type: AlertType.REC,
+  });
+
+  // if alert has already been sent, return
+  if (alert && alert.alert_sent_at) {
     return;
   }
 
-  // TODO: Deactivate document from Alerts collection if REC is submitted (is equal to true?)
-
+  // add to alerts collection
   insertAlertCollection(award, AlertType.REC);
 
   // send message to RabbitMQ
@@ -39,13 +47,4 @@ export default async function checkREC(award: Award) {
       created_at: timestamp(),
     },
   });
-}
-
-/**
- * Check if an award has REC submitted.
- *
- * @param {Award} award - The award to check for REC submission.
- */
-export function isRECSubmitted(award: Award) {
-  return !!award.award_number && award.rec_submitted;
 }
