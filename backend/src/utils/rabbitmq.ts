@@ -1,4 +1,7 @@
 import amqp from "amqplib";
+import { Alert } from "@/types";
+import constants from "@/constants/constants";
+import timestamp from "./timestamp";
 
 export async function connect(url: string, exchange: string, queue: string) {
   try {
@@ -13,4 +16,29 @@ export async function connect(url: string, exchange: string, queue: string) {
   } catch (error) {
     console.error(error);
   }
+}
+
+export async function publishToAlertsSentQueue(alert: Partial<Alert>) {
+  const { RABBITMQ_URL } = process.env;
+  const { RABBITMQ_EXCHANGE, ALERTS_SENT_QUEUE } = constants;
+  const channel = await connect(
+    RABBITMQ_URL as string,
+    RABBITMQ_EXCHANGE,
+    ALERTS_SENT_QUEUE
+  );
+
+  if (!channel) {
+    throw new Error("RabbitMQ channel not found");
+  }
+
+  channel.publish(
+    RABBITMQ_EXCHANGE,
+    ALERTS_SENT_QUEUE,
+    Buffer.from(
+      JSON.stringify({
+        ...alert,
+        alert_sent_at: timestamp(),
+      })
+    )
+  );
 }

@@ -1,14 +1,18 @@
 // import express from "express";
-import monitorAwards from "@/features/monitorAwards";
+import monitorAwardsTable from "@/features/monitorAwardsTable";
 import seedAwards from "@/postgresql/seedAwards";
 import web from "@/features/web";
+import { monitorAlertsSentQueue } from "./features/monitorAlertsSentQueue";
+import { monitorAlertsQueue } from "./features/monitorAlertsQueue";
 
 main();
 
 export default async function main() {
   try {
     await seedAwards();
-    monitorAwards();
+    monitorAwardsTable();
+    monitorAlertsQueue();
+    monitorAlertsSentQueue();
     // web();
   } catch (error) {
     console.error(error);

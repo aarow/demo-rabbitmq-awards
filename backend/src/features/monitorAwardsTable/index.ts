@@ -3,7 +3,7 @@ import { Payload } from "@/types/AwardNotifications";
 import checkAward from "./checkAward";
 import { useAwardNotifications } from "@/postgresql/awards-table";
 
-export default async function monitorAwards() {
+export default async function monitorAwardsTable() {
   useAwardNotifications((payload: Payload) => {
     const { new: award, old: oldAward, operationType } = payload;
 

@@ -30,3 +30,10 @@ export async function setAlertToInactive(award: Award, alert_type: AlertType) {
   await sql`UPDATE alerts SET inactive_at = ${timestamp()} 
     WHERE award_number = ${award.award_number} AND alert_type = ${alert_type}`;
 }
+
+export async function updateAlertSentAt(
+  award_number: string,
+  alert_type: AlertType
+) {
+  await sql`UPDATE alerts SET alert_sent_at = ${timestamp()} WHERE award_number = ${award_number} AND alert_type = ${alert_type}`;
+}
