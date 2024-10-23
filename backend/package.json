@@ -9,20 +9,23 @@
   },
   "dependencies": {
     "amqplib": "^0.10.4",
-    "dotenv": "^8.2.0",
+    "dotenv": "^8.6.0",
     "express": "^4.17.1",
     "mongodb": "^6.9.0",
     "mongoose": "^5.10.9",
-    "pg": "^8.13.0"
+    "pg": "^8.13.0",
+    "postgres": "^3.4.4"
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.5",
+    "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.0",
     "@types/mongodb": "^4.0.7",
     "@types/node": "^22.7.5",
     "@types/pg": "^8.11.10",
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.6.3"
   }
 }
