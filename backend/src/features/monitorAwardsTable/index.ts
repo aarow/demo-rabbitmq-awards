@@ -1,16 +1,16 @@
 import { AlertType } from "@/types/Alert";
 import { Payload } from "@/types/AwardNotifications";
-import checkAward from "./checkAward";
-import { useAwardNotifications } from "@/postgresql/awards-table";
+import { useAwardTableNotifications } from "@/postgresql/awards-table";
+import processAward from "./processAward";
 
 export default async function monitorAwardsTable() {
-  useAwardNotifications((payload: Payload) => {
+  useAwardTableNotifications((payload: Payload) => {
     const { new: award, old: oldAward, operationType } = payload;
 
     console.log("Award updated:", award);
 
     Object.values(AlertType).forEach((alertType) => {
-      checkAward(award, alertType);
+      processAward(award, alertType);
     });
   });
 }

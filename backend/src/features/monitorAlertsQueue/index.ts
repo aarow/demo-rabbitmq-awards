@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import constants from "@/constants/constants";
 import { connect, publishToAlertsSentQueue } from "@/utils/rabbitmq";
+import { sendMessageToEmail } from "./sendMessageToEmail";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ export async function monitorAlertsQueue() {
     const msgObject = JSON.parse(msg.content.toString());
     console.log("alerts queue message: ", msgObject);
 
+    sendMessageToEmail(msgObject);
     publishToAlertsSentQueue(msgObject);
 
     channel.ack(msg);

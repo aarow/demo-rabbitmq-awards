@@ -10,16 +10,13 @@ import {
 import constants from "@/constants/constants";
 import { alertsMap } from "./alertsMap";
 
-/**
- * Check if an award has a REC submission. If not, insert an alert into the
- * alerts collection and send a message to RabbitMQ.
- * @param {Award} award - the award to check
- */
-export default async function checkAward(award: Award, alert_type: AlertType) {
-  console.log("checkAward:\n", { alert_type, award });
-  // if REC has already been submitted, return
-  if (alertsMap[alert_type].condition(award)) {
-    console.log("condition: ", alertsMap[alert_type].condition(award));
+export default async function processAward(
+  award: Award,
+  alert_type: AlertType
+) {
+  // test if award requires an alert by alert type
+  // if false, set the associated alert to inactive, and return
+  if (alertsMap[alert_type].isAlertRequired(award) === false) {
     await setAlertToInactive(award, alert_type);
     return;
   }
@@ -28,8 +25,6 @@ export default async function checkAward(award: Award, alert_type: AlertType) {
     award_number: award.award_number,
     alert_type,
   });
-
-  console.log("alert: ", alert);
 
   // if alert has already been sent, return
   if (alert.length > 0 && alert[0].alert_sent_at) {

@@ -3,6 +3,9 @@ import { Alert } from "@/types";
 import constants from "@/constants/constants";
 import timestamp from "./timestamp";
 
+const { RABBITMQ_URL } = process.env;
+const { RABBITMQ_EXCHANGE, ALERTS_SENT_QUEUE } = constants;
+
 export async function connect(url: string, exchange: string, queue: string) {
   try {
     const connection = await amqp.connect(url);
@@ -19,8 +22,6 @@ export async function connect(url: string, exchange: string, queue: string) {
 }
 
 export async function publishToAlertsSentQueue(alert: Partial<Alert>) {
-  const { RABBITMQ_URL } = process.env;
-  const { RABBITMQ_EXCHANGE, ALERTS_SENT_QUEUE } = constants;
   const channel = await connect(
     RABBITMQ_URL as string,
     RABBITMQ_EXCHANGE,
