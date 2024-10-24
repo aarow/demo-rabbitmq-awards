@@ -16,7 +16,7 @@ interface AlertsTableProps {
 }
 
 export function AlertsTable({ initialAlerts }: AlertsTableProps) {
-  const alerts = useWatchAlerts(initialAlerts);
+  // const alerts = useWatchAlerts(initialAlerts);
 
   return (
     <Table>
@@ -27,16 +27,18 @@ export function AlertsTable({ initialAlerts }: AlertsTableProps) {
           <TableHead>Alert Type</TableHead>
           <TableHead>Alert Sent At</TableHead>
           <TableHead>Created At</TableHead>
+          <TableHead>Inactive At</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {alerts.map((alert) => (
-          <TableRow key={alert._id}>
-            <TableCell className="font-medium">{alert._id}</TableCell>
+        {initialAlerts.map((alert) => (
+          <TableRow key={alert.id}>
+            <TableCell className="font-medium">{alert.id}</TableCell>
             <TableCell>{alert.award_number}</TableCell>
             <TableCell>{alert.alert_type}</TableCell>
             <TableCell>{alert.alert_sent_at as string}</TableCell>
             <TableCell>{alert.created_at}</TableCell>
+            <TableCell>{alert.inactive_at}</TableCell>
           </TableRow>
         ))}
       </TableBody>

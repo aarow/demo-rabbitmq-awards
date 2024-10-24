@@ -1,24 +1,43 @@
 services:
-  mongo:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: mongodb-replicaset
+  db:
+    image: postgres
     restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
-    ports:
-      - 27017:27017
-    command: --replSet rs0 --keyFile /etc/mongo-keyfile --bind_ip_all --port 27017
-    healthcheck:
-      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'127.0.0.1:27017'}]}) }" | mongosh --port 27017 -u root -p root --authenticationDatabase admin
-      interval: 5s
-      timeout: 15s
-      start_period: 15s
-      retries: 10
     volumes:
-      - data:/data/db
+      - ./postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: rabbitmq-demo
+    ports:
+      - 5432:5432
+
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  # mongo:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: mongodb-replicaset
+  #   restart: always
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: root
+  #   ports:
+  #     - 27017:27017
+  #   command: --replSet rs0 --keyFile /etc/mongo-keyfile --bind_ip_all --port 27017
+  #   healthcheck:
+  #     test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'127.0.0.1:27017'}]}) }" | mongosh --port 27017 -u root -p root --authenticationDatabase admin
+  #     interval: 5s
+  #     timeout: 15s
+  #     start_period: 15s
+  #     retries: 10
+  #   volumes:
+  #     - data:/data/db
 
   # backend:
   #   build:
