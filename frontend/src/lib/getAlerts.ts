@@ -6,7 +6,7 @@ export const getAlerts = async () => {
   console.log("dbClient.database", dbClient.database);
 
   const results = await dbClient.query(
-    `SELECT * FROM public.alerts LIMIT 100;`
+    `SELECT * FROM public.alerts LIMIT 1000;`
   );
 
   return JSON.parse(JSON.stringify(results.rows)) as Alert[]; // convert ObjectId to string
