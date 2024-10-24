@@ -1,6 +1,7 @@
 export enum AlertType {
   CHECKLIST = "CHECKLIST_COMPLETION",
   REC = "REC_SUBMISSION",
+  HEALTH_COLOR_CODE = "HEALTH_COLOR_CODE_SELECTION",
 }
 
 export type Alert = {

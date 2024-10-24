@@ -1,15 +1,16 @@
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 import constants from "@/constants/constants";
 import { connect, publishToAlertsSentQueue } from "@/utils/rabbitmq";
 import { sendMessageToEmail } from "./sendMessageToEmail";
 
 dotenv.config();
 
+const { RABBITMQ_URL } = process.env;
 const { RABBITMQ_EXCHANGE, ALERTS_QUEUE } = constants;
 
 export async function monitorAlertsQueue() {
   const channel = await connect(
-    process.env.RABBITMQ_URL as string,
+    RABBITMQ_URL as string,
     RABBITMQ_EXCHANGE,
     ALERTS_QUEUE
   );

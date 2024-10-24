@@ -7,14 +7,14 @@
     "strict": true, // Enable all strict type-checking options
     "esModuleInterop": true, // Enables emit interoperability between CommonJS and ES Modules
     "allowJs": true,
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
   "ts-node": {
-    // Do not forget to `npm i -D tsconfig-paths`
     "require": ["tsconfig-paths/register"]
   },
   "include": ["src/**/*"], // Include all TypeScript files in the src directory
-  "exclude": ["node_modules"] // Exclude the node_modules directory
+  "exclude": ["dist", "node_modules"] // Exclude the node_modules directory
 }

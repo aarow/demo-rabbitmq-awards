@@ -1,4 +1,3 @@
-// import express from "express";
 import monitorAwardsTable from "@/features/monitorAwardsTable";
 import seedAwards from "@/postgresql/seedAwards";
 import { monitorAlertsSentQueue } from "./features/monitorAlertsSentQueue";

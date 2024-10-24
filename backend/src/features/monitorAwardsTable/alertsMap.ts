@@ -29,4 +29,18 @@ export const alertsMap = {
       created_at: timestamp(),
     }),
   },
+  [AlertType.HEALTH_COLOR_CODE]: {
+    isAlertRequired: (award: Award) => {
+      // SOME SQL QUERY TO CHECK IF THE AWARD IS IN THE COLOR CODE TABLE
+      return false;
+    },
+    alertMessageData: (award: Award) => ({
+      award_number: award.award_number,
+      alert_type: AlertType.CHECKLIST,
+      name: ADMIN_NAME as string,
+      email: ADMIN_EMAIL as string,
+      message: `Award is missing Award Health Color Code selection: ${award.award_number}`,
+      created_at: timestamp(),
+    }),
+  },
 };
