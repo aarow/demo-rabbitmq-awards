@@ -1,7 +1,7 @@
 const { createServer } = require("node:http");
 const next = require("next");
 const { Server } = require("socket.io");
-const { watchAlerts } = require("./lib/watchAlerts");
+const { watchAlerts } = require("./lib/watchAlertsMongo");
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
@@ -18,9 +18,9 @@ app.prepare().then(() => {
     console.log("Client connected");
   });
 
-  watchAlerts((alert) => {
-    io.emit("new-alert", alert);
-  });
+  // watchAlerts((alert) => {
+  //   io.emit("new-alert", alert);
+  // });
 
   httpServer
     .once("error", (err) => {
