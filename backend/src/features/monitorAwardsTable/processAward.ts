@@ -16,7 +16,7 @@ export default async function processAward(
 ) {
   // test if award requires an alert by alert type
   // if false, set the associated alert to inactive, and return
-  if (alertsMap[alert_type].isAlertRequired(award) === false) {
+  if ((await alertsMap[alert_type].isAlertRequired(award)) === false) {
     await setAlertToInactive(award, alert_type);
     return;
   }
