@@ -11,3 +11,14 @@ export type Alert = {
   id: string;
   inactive_at: string | null;
 };
+
+export enum OperationType {
+  UPDATE = "UPDATE",
+  INSERT = "INSERT",
+}
+
+export type AlertChange = {
+  operationType: OperationType;
+  new: Alert;
+  old: Alert;
+};

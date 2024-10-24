@@ -16,7 +16,7 @@ interface AlertsTableProps {
 }
 
 export function AlertsTable({ initialAlerts }: AlertsTableProps) {
-  // const alerts = useWatchAlerts(initialAlerts);
+  const alerts = useWatchAlerts(initialAlerts);
 
   return (
     <Table>
@@ -31,7 +31,7 @@ export function AlertsTable({ initialAlerts }: AlertsTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {initialAlerts.map((alert) => (
+        {alerts.map((alert) => (
           <TableRow key={alert.id}>
             <TableCell className="font-medium">{alert.id}</TableCell>
             <TableCell>{alert.award_number}</TableCell>
