@@ -14,5 +14,8 @@ COPY . .
 # Expose the port the app runs on.
 EXPOSE 3000
 
+# Start the app.
+RUN npm run build
+
 # Check the NODE_ENV variable and run the appropriate command
 CMD ["sh", "-c", "if [ \"$NODE_ENV\" = 'production' ]; then npm run build && npm start; else npm run dev; fi"]

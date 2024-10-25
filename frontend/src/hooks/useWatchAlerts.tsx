@@ -1,10 +1,7 @@
-// new hook for updating alerts
 import { useEffect, useState } from "react";
 import { socket } from "@/lib/socket";
-import { Alert } from "../types";
-import updateAlertsWithNewAlert, {
-  AlertChange,
-} from "@/lib/updateAlertsWithNewAlert";
+import { Alert, AlertChange } from "../types";
+import updateAlertsWithNewAlert from "@/lib/updateAlertsWithNewAlert";
 
 export function useWatchAlerts(initialAlerts: Alert[]) {
   const [alerts, setAlerts] = useState<Alert[]>(initialAlerts);
