@@ -1,7 +1,9 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { Alert } from "@/types";
 import connect from "./db/connect";
 
 export const getAlerts = async () => {
+  noStore();
   const dbClient = await connect();
   console.log("dbClient.database", dbClient.database);
 

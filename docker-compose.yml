@@ -25,7 +25,6 @@ services:
     ports:
       - "5001:5001"
     environment:
-      - MONGODB_URI=${MONGODB_URI}
       - PG_HOST=${PG_HOST}
       - PG_PORT=${PG_PORT}
       - PG_DATABASE=${PG_DATABASE}
@@ -38,18 +37,24 @@ services:
     command: npm run start
       
 
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #   restart: always
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./frontend:/usr/src/app  # Mount local frontend directory
-  #   environment:
-  #     - NODE_ENV=${NODE_ENV}  # Set environment to development or production
-  #   depends_on:
-  #     - backend
+  frontend:
+    build:
+      context: ./frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/usr/src/app  # Mount local frontend directory
+    environment:
+      - NODE_ENV=${NODE_ENV}  # Set environment to development or production
+      - PG_HOST=${PG_HOST}
+      - PG_PORT=${PG_PORT}
+      - PG_DATABASE=${PG_DATABASE}
+      - PG_USER=${PG_USER}
+      - PG_PASSWORD=${PG_PASSWORD}
+    depends_on:
+      - backend
+      - db
  
 volumes:
   data: {}
