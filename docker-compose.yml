@@ -32,6 +32,7 @@ services:
       - PG_PASSWORD=${PG_PASSWORD}
       - ADMIN_EMAIL=${ADMIN_EMAIL}
       - ADMIN_NAME=${ADMIN_NAME}
+      - RABBITMQ_URL=${RABBITMQ_URL}
     depends_on:
       - db
     command: npm run start
@@ -52,6 +53,7 @@ services:
       - PG_DATABASE=${PG_DATABASE}
       - PG_USER=${PG_USER}
       - PG_PASSWORD=${PG_PASSWORD}
+      - RABBITMQ_URL=${RABBITMQ_URL}
     depends_on:
       - backend
       - db
