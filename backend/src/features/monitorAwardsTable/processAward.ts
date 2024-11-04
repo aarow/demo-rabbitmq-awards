@@ -11,37 +11,39 @@ import constants from "@/constants/constants";
 import { alertsMap } from "./alertsMap";
 
 export default async function processAward(
-  award: Award,
+  log_no: string,
   alert_type: AlertType
 ) {
   // test if award requires an alert by alert type
   // if false, set the associated alert to inactive, and return
-  if ((await alertsMap[alert_type].isAlertRequired(award)) === false) {
-    await setAlertToInactive(award, alert_type);
+  if ((await alertsMap[alert_type].isAlertRequired(log_no)) === false) {
+    await setAlertToInactive(log_no, alert_type);
     return;
   }
 
-  const alert = await getAlert({
-    award_number: award.award_number,
+  const result = await getAlert({
+    award_number: log_no,
     alert_type,
   });
 
   // if alert has already been sent, return
-  if (alert.length > 0 && alert[0].alert_sent_at) {
-    console.log("alert_sent_at: ", alert[0].alert_sent_at);
+  if (result.length > 0 && result[0].alert_sent_at !== null) {
+    console.log("alert_sent_at: ", result[0].alert_sent_at);
     return;
   }
 
-  // add to alert to alerts table
-  console.log("insert new alert");
-  const newAlert = await insertAlert({ award, alert_type });
-  console.log("newAlert:\n", newAlert);
+  if(result.length === 0) {
+    // add to alert to alerts table
+    console.log("insert new alert");
+    const newAlert = await insertAlert({ log_no, alert_type });
+    console.log("newAlert:\n", newAlert);
+  }
 
   // send message to RabbitMQ
   console.log("sending alert message to rabbitmq");
   await sendMessage({
     queueName: constants.ALERTS_QUEUE,
-    data: alertsMap[alert_type].alertMessageData(award),
+    data: alertsMap[alert_type].alertMessageData(log_no),
   });
   console.log("sent alert message to rabbitmq");
 }

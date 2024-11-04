@@ -5,7 +5,7 @@ export enum AwardHealthColorCode {
 }
 
 export type Award = {
-  id: string;
+  log_no: string;
   award_number: string;
   acuro_checklist_submitted: boolean;
   ohro_checklist_submitted: boolean;
