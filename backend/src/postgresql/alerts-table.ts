@@ -13,22 +13,22 @@ export async function getAlert({ award_number, alert_type }: GetAlertParams) {
 }
 
 interface InsertAlertParams {
-  award: Award;
+  log_no: string;
   alert_type: AlertType;
 }
 
-export async function insertAlert({ award, alert_type }: InsertAlertParams) {
-  return sql`INSERT INTO public.alerts 
+export async function insertAlert({ log_no, alert_type }: InsertAlertParams) {
+  return sql`INSERT INTO alerts 
     (award_number, id, inactive_at, alert_type, alert_sent_at, created_at) 
     VALUES 
     (${
-      award.award_number
+      log_no
     }, DEFAULT, DEFAULT, ${alert_type}, DEFAULT, ${timestamp()})`;
 }
 
-export async function setAlertToInactive(award: Award, alert_type: AlertType) {
+export async function setAlertToInactive(log_no: string, alert_type: AlertType) {
   await sql`UPDATE alerts SET inactive_at = ${timestamp()} 
-    WHERE award_number = ${award.award_number} AND alert_type = ${alert_type}`;
+    WHERE award_number = ${log_no} AND alert_type = ${alert_type}`;
 }
 
 export async function updateAlertSentAt(
