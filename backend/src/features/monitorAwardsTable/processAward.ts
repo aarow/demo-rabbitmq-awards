@@ -32,10 +32,12 @@ export default async function processAward(
     return;
   }
 
-  // add to alert to alerts table
-  console.log("insert new alert");
-  const newAlert = await insertAlert({ log_no, alert_type });
-  console.log("newAlert:\n", newAlert);
+  if(result.length === 0) {
+    // add to alert to alerts table
+    console.log("insert new alert");
+    const newAlert = await insertAlert({ log_no, alert_type });
+    console.log("newAlert:\n", newAlert);
+  }
 
   // send message to RabbitMQ
   console.log("sending alert message to rabbitmq");
