@@ -7,6 +7,6 @@ export enum OperationType {
 
 export type Payload = {
   operationType: OperationType;
-  new: Award;
-  old?: Award;
+  new: string;
+  old?: string;
 };
